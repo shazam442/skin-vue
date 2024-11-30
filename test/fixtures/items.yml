@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  wear: 1
+  category: 1
+  stattrak: false
+  souvenir: false
+
+two:
+  name: MyString
+  wear: 1
+  category: 1
+  stattrak: false
+  souvenir: false
