@@ -5,12 +5,12 @@ class ItemsController < ApplicationController
   def index
     @items = Item.all
 
-    render json: @items
+    render json: @items.map { |item| item.as_json.merge(img_url: item.img_url) }
   end
 
   # GET /items/1
   def show
-    render json: @item
+    render json: @item.as_json.merge(img_url: @item.img_url)
   end
 
   # POST /items
@@ -18,7 +18,7 @@ class ItemsController < ApplicationController
     @item = Item.new(item_params)
 
     if @item.save
-      render json: @item, status: :created, location: @item
+      render json: @item.as_json.merge(img_url: @item.img_url), status: :created, location: @item
     else
       render json: @item.errors, status: :unprocessable_entity
     end
@@ -27,7 +27,7 @@ class ItemsController < ApplicationController
   # PATCH/PUT /items/1
   def update
     if @item.update(item_params)
-      render json: @item
+      render json: @item.as_json.merge(img_url: @item.img_url)
     else
       render json: @item.errors, status: :unprocessable_entity
     end
@@ -46,7 +46,6 @@ class ItemsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def item_params
-      debugger
       params.require(:item).permit(:name, :wear, :category, :stattrak, :souvenir)
     end
 end

@@ -1,8 +1,8 @@
 <template>
-  <main class="flex flex-col gap-4 selection:w-full h-full p-4 bg-slate-800 font-mono font-bold text-lg">
+  <main class="flex flex-col gap-4 selection:w-full h-full p-4 font-mono font-bold text-lg">
     <div class="flex gap-4">
       <div>
-        <label for="item" class="text-white">Item Name</label>
+        <label for="item" class="">Item Name</label>
         <input type="text"
           v-model="item"
           name="item"
@@ -11,7 +11,7 @@
         >
       </div>
       <div>
-        <label for="category" class="text-white">Category</label>
+        <label for="category" class="">Category</label>
         <select
           name="category"
           placeholder="AK-47 | Bloodsport"
@@ -25,7 +25,7 @@
       </div>
     </div>
     <div>
-      <label for="wear" class="text-white">Wear</label>
+      <label for="wear" class="">Wear</label>
       <select
         v-model="wear"
         name="wear"
@@ -36,8 +36,8 @@
         <option value="minimal_wear">Minimal Wear</option>
         <option value="field_tested">Field-Tested</option>
         <option value="well_worn">Well-Worn</option>
-        <option value="battle_scarred">Battle-Scarred</option>+
-        <option class="text-red-400" value="no_wear">No Wear</option>+
+        <option value="battle_scarred">Battle-Scarred</option>
+        <option class="text-red-400" value="no_wear">No Wear</option>
       </select>
     </div>
     <div class="flex items-center">
@@ -48,7 +48,7 @@
         type="checkbox"
         class="size-4 mr-4"
       >
-      <label for="stattrak" class="text-white">StatTrak</label>
+      <label for="stattrak" class="">StatTrak</label>
     </div>
     <div class="flex items-center">
       <input 
@@ -58,7 +58,7 @@
         type="checkbox"
         class="size-4 mr-4"
       >
-      <label for="souvenir" class="text-white">Souvenir</label>
+      <label for="souvenir" class="">Souvenir</label>
     </div>
     
     <input name="create" @click="createItemRequest" type="submit" class="border w-fit py-2 px-8 self-center">

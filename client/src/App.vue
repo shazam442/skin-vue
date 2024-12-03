@@ -1,16 +1,14 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
+import Navbar from './components/layout/Navbar.vue'
 </script>
 
 <template>
-  <header>
-    <nav class="bg-slate-700 border-b p-4 flex divide-x">
-      <RouterLink to="/" class="text-3xl font-bold">Home</RouterLink>
-      <p class="text-3xl font-bold">cockadoo</p>
-    </nav>
-  </header>
-  <RouterView />
-</template>
+  <Navbar />
+  <div class="max-w-screen-xl mx-auto min-h-screen p-8">
+    <RouterView />
+  </div>
+  </template>
 
 <style scoped>
 
