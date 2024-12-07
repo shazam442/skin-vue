@@ -10,7 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_30_193944) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_07_195128) do
+  create_table "api_requests", force: :cascade do |t|
+    t.string "target_type", null: false
+    t.integer "target_id", null: false
+    t.string "target_url", null: false
+    t.boolean "success", null: false
+    t.json "request_body"
+    t.json "response_body"
+    t.integer "response_code"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["target_type", "target_id"], name: "index_api_requests_on_target"
+  end
+
   create_table "items", force: :cascade do |t|
     t.string "name", null: false
     t.integer "wear", null: false
@@ -22,9 +35,24 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_30_193944) do
     t.index ["name", "wear", "stattrak", "souvenir"], name: "index_items_on_name_and_wear_and_stattrak_and_souvenir", unique: true
   end
 
+  create_table "market_pages", force: :cascade do |t|
+    t.integer "market_id", null: false
+    t.integer "item_id", null: false
+    t.decimal "min_price"
+    t.integer "quantity_available"
+    t.integer "volume_sold"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["item_id"], name: "index_market_pages_on_item_id"
+    t.index ["market_id"], name: "index_market_pages_on_market_id"
+  end
+
   create_table "markets", force: :cascade do |t|
     t.integer "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  add_foreign_key "market_pages", "items"
+  add_foreign_key "market_pages", "markets"
 end

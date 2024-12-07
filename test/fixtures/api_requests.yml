@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  target: one
+  target_url: MyString
+  success: false
+  request_body: 
+  response_body: 
+  response_code: 1
+
+two:
+  target: two
+  target_url: MyString
+  success: false
+  request_body: 
+  response_body: 
+  response_code: 1
