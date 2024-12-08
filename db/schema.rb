@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_07_195128) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_08_004049) do
   create_table "api_requests", force: :cascade do |t|
     t.string "target_type", null: false
     t.integer "target_id", null: false
@@ -35,6 +35,16 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_07_195128) do
     t.index ["name", "wear", "stattrak", "souvenir"], name: "index_items_on_name_and_wear_and_stattrak_and_souvenir", unique: true
   end
 
+  create_table "listings", force: :cascade do |t|
+    t.integer "market_page_id", null: false
+    t.decimal "price", null: false
+    t.decimal "wear"
+    t.string "uid"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["market_page_id"], name: "index_listings_on_market_page_id"
+  end
+
   create_table "market_pages", force: :cascade do |t|
     t.integer "market_id", null: false
     t.integer "item_id", null: false
@@ -53,6 +63,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_07_195128) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "listings", "market_pages"
   add_foreign_key "market_pages", "items"
   add_foreign_key "market_pages", "markets"
 end

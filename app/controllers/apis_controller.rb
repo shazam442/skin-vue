@@ -1,9 +1,8 @@
 class ApisController < ApplicationController
   def skinbaron
-    skinbaron = Skinbaron::Client.new
-    render json: skinbaron.dev
-  end
+    item = Item.find params[:item_id]
 
-  def fetch_price
+    skinbaron_service = Skinbaron::Service.new(item)
+    render json: skinbaron_service.get_listings
   end
 end

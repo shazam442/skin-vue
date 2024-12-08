@@ -3,14 +3,18 @@ module Skinbaron
 class Client
   BASE_API_URL = "https://api.skinbaron.de/"
 
+  def initialize(item)
+    @item = item
+  end
+
   def dev
-    search
+    # search
   end
 
   def search
     url = "#{BASE_API_URL}Search"
 
-    req_body = base_body
+    req_body = base_body.merge({ "search_item": @item.market_hash_name(wear: false) })
 
     res = nil
 
@@ -25,7 +29,7 @@ class Client
       ar.save
     end
 
-    res.body
+    res.parsed_response
   end
 
   private
@@ -33,8 +37,7 @@ class Client
   def base_body
     {
       "apikey": Rails.application.credentials.skinbaron_api_key,
-      "appid": 730,
-      "search_item": "AK-47 | Redline"
+      "appid": 730
     }
   end
 

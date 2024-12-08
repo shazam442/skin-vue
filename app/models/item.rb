@@ -16,13 +16,14 @@ class Item < ApplicationRecord
 
   def img_url = "https://api.steamapis.com/image/item/730/#{uri_encoded_market_hash_name}"
 
-  def market_hash_name
+  def market_hash_name(wear: true, sttrk_souv: true, knife_prefix: true)
     s = ""
-    s += "★ " if knife?
-    s += "Souvenir " if souvenir?
-    s += "StatTrak™ " if stattrak?
+    s += "★ " if knife? && knife_prefix
+    s += "Souvenir " if souvenir? && sttrk_souv
+    s += "StatTrak™ " if stattrak? && sttrk_souv
     s += name
-    s += " (#{wear_name_full})" unless no_wear?
+    s += " (#{wear_name_full})" unless no_wear? || !wear
+    s
   end
 
   def wear_name_full

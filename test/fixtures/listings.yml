@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  market_page: one
+  price: 9.99
+  float: 9.99
+  uid: MyString
+
+two:
+  market_page: two
+  price: 9.99
+  float: 9.99
+  uid: MyString
