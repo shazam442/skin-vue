@@ -1,7 +1,9 @@
 Rails.application.routes.draw do
   resources :items do
-    get :skinbaron, to: "apis#skinbaron"
+    post :update, on: :collection
   end
+
+  resources :listings, only: [ :index ]
 
   root "items#index"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

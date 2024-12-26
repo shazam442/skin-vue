@@ -1,26 +1,38 @@
 module Skinbaron
 class Service
-  def initialize(item)
-    @client = Client.new(item)
-    @item = item
-  end
-
-  def get_listings
-    sync_listings_to_db
+  def initialize(items)
+    @items = Array(items)
+    @query_names = @items.map { |item| item.market_hash_name(wear: false, sttrk_souv: false) }
+    @item_names = @items.map { |item| item.market_hash_name }
+    @market = Market.find_by(name: "skinbaron")
   end
 
   def sync_listings_to_db
-    items = @client.search["sales"]
+    skinbaron_listings = SkinbaronClient.search(item: query_names.join(";"))["sales"]
 
-    items.select! { |item| item["market_name"] == @item.market_hash_name }
+    skinbaron_listings.each do |listing_data|
+      # if listing is already in our database, update it
+      listing = Listing.find_by(uid: listing_data["id"])
+      if listing
+        listing.update!(price: listing_data["price"], wear: listing_data["wear"])
+        next
+      end
 
-    items.map do |item|
-      Listing.create!(
-        market_page: MarketPage.find_or_create_by!(market: Market.find_by(name: "skinbaron").id, item: @item.id),
-        price: item["price"],
-        wear: item["wear"],
-        uid: item["id"],
-      )
+      # if not in db, extract item data from market name and check if item exists in our database
+      byebug
+
+      # Skip if we don't have this item in our database
+      next unless item
+
+      # Find or create the market page for this item
+
+
+      # Create the listing
+      Listing.find_or_create_by!(uid: listing_data["id"]) do |listing|
+        listing.market_page = market_page
+        listing.price = listing_data["price"]
+        listing.wear = listing_data["wear"]
+      end
     end
   end
 end

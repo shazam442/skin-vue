@@ -1,8 +1,12 @@
 class ApisController < ApplicationController
-  def skinbaron
-    item = Item.find params[:item_id]
+  before_action :set_item
 
-    skinbaron_service = Skinbaron::Service.new(item)
-    render json: skinbaron_service.get_listings
+  def skinbaron
+    item_name = @item.market_hash_name(wear: false, sttrk_souv: false)
+    render json: SkinbaronClient.search(item: item_name)
+  end
+
+  def set_item
+    @item = Item.find params[:item_id]
   end
 end

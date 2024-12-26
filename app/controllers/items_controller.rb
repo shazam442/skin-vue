@@ -13,6 +13,13 @@ class ItemsController < ApplicationController
     render json: @item.as_json.merge(img_url: @item.img_url)
   end
 
+  def update
+    @items = Item.all
+    Skinbaron::Service.new(@items).sync_listings_to_db
+
+    render json: { success: true }
+  end
+
   # POST /items
   def create
     @item = Item.new(item_params)
