@@ -2,38 +2,56 @@ module Skinbaron
 class Service
   def initialize(items)
     @items = Array(items)
-    @query_names = @items.map { |item| item.market_hash_name(wear: false, sttrk_souv: false) }
-    @item_names = @items.map { |item| item.market_hash_name }
-    @market = Market.find_by(name: "skinbaron")
+    @market = Market.skinbaron
+    @market_page = nil
   end
 
-  def sync_listings_to_db
-    skinbaron_listings = SkinbaronClient.search(item: query_names.join(";"))["sales"]
-
-    skinbaron_listings.each do |listing_data|
-      # if listing is already in our database, update it
-      listing = Listing.find_by(uid: listing_data["id"])
-      if listing
-        listing.update!(price: listing_data["price"], wear: listing_data["wear"])
-        next
-      end
-
-      # if not in db, extract item data from market name and check if item exists in our database
-      byebug
-
-      # Skip if we don't have this item in our database
-      next unless item
-
-      # Find or create the market page for this item
-
-
-      # Create the listing
-      Listing.find_or_create_by!(uid: listing_data["id"]) do |listing|
-        listing.market_page = market_page
-        listing.price = listing_data["price"]
-        listing.wear = listing_data["wear"]
-      end
+  def sync_to_db
+    if @items.one?
+      sync_one(@items.first)
+    else
+      # sync_multiple(@items)
     end
+  end
+
+  def sync_one(item)
+    market_page = MarketPage.find_or_create_by(market: @market, item: item)
+
+    # Extract query parameters to a separate method for clarity
+    query_params = build_query_params(item)
+    listings = SkinbaronClient.search(**query_params)
+
+    # Use bulk insert instead of individual upserts for better performance
+    listing_attributes = listings.map do |listing|
+      {
+        market_page_id: market_page.id,
+        uid: listing["id"],
+        float: listing["wear"],
+        price: listing["price"],
+        created_at: Time.current,
+        updated_at: Time.current
+      }
+    end
+
+    Listing.upsert_all(
+      listing_attributes,
+      unique_by: :uid,
+      returning: false
+    )
+  end
+
+  private
+
+  def build_query_params(item)
+    {
+      items: item.market_hash_name(wear: false, sttrk_souv: false),
+      pages: -1,
+      min_wear: item.float_range.begin,
+      max_wear: item.float_range.end,
+      stattrak: item.stattrak?,
+      souvenir: item.souvenir?,
+      stackable: false
+    }
   end
 end
 end

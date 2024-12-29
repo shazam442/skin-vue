@@ -15,10 +15,10 @@ markets = [
 ]
 
 items = [
-  Item.find_or_create_by!(name: "AK-47 | Redline", wear: :factory_new, category: :weapon, stattrak: false, souvenir: false),
-  Item.find_or_create_by!(name: "AWP | Dragon Lore", wear: :factory_new, category: :weapon, stattrak: false, souvenir: false),
-  Item.find_or_create_by!(name: "M9 Bayonet | Doppler", wear: :factory_new, category: :knife, stattrak: false, souvenir: false),
-  Item.find_or_create_by!(name: "M4A4 | Howl", wear: :factory_new, category: :weapon, stattrak: false, souvenir: false)
+  Item.find_or_create_by!(name: "Galil AR | Metallic Squeezer", wear: :minimal_wear, category: :weapon, stattrak: false, souvenir: false),
+  Item.find_or_create_by!(name: "PP-Bizon | Cold Cell", wear: :factory_new, category: :weapon, stattrak: false, souvenir: false),
+  Item.find_or_create_by!(name: "Glock-18 | Teal Graf", wear: :factory_new, category: :knife, stattrak: false, souvenir: false),
+  Item.find_or_create_by!(name: "Nova | Yorkshire", wear: :factory_new, category: :weapon, stattrak: false, souvenir: false)
 ]
 
 items.each do |item|
