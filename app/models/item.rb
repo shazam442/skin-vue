@@ -1,4 +1,8 @@
 class Item < ApplicationRecord
+  has_many :market_pages, dependent: :destroy
+  has_many :listings, through: :market_pages
+
+  validates :name, uniqueness: { scope: [ :wear, :stattrak, :souvenir ] }
   validate :stattrak_and_souvenir_are_mutually_exclusive
 
   enum :wear, {
@@ -19,6 +23,8 @@ class Item < ApplicationRecord
   def sync_listings
     Skinbaron::Service.new(self).sync_to_db
   end
+
+  def cheapest_listing = listings.order(:price).first
 
   def img_url = "https://api.steamapis.com/image/item/730/#{uri_encoded_market_hash_name}"
 

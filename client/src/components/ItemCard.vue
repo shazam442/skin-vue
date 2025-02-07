@@ -1,46 +1,66 @@
-<script setup>
-import { defineProps } from 'vue'
+<script setup lang="ts">
+import { Item } from '@/lib/types'
 
-const props = defineProps({ 
-    item: Object
+const props = defineProps<{
+  item: Item
+}>()
+
+const emit = defineEmits(['sync-listings', 'edit'])
+const isSyncing = ref(false)
+
+const handleSync = async () => {
+  isSyncing.value = true
+  await new Promise(resolve => {
+    emit('sync-listings', props.item, resolve)
+  })
+  isSyncing.value = false
+}
+
+const handleEdit = () => {
+  emit('edit', props.item)
+}
+
+const { img_url, name, cheapest_listing } = props.item
+
+watch(props.item, (newItem) => {
+  console.log('item changed', newItem)
 })
 
-const { img_url: imgUrl, name } = props.item
+const formattedPrice = computed(() => {
+  return props.item.cheapest_listing?.price 
+    ? `$${props.item.cheapest_listing.price}` 
+    : 'No price'
+})
 </script>
 
 <template>
-    <div class="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-        <a href="#">
-        <img class="p-1 rounded-t-lg" :src="imgUrl" alt="product image" />
-        </a>
-        <div class="px-5 pb-5">
-            <a href="#">
-                <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{{ name }}</h5>
-            </a>
-            <div class="flex items-center mt-2.5 mb-5">
-                <div class="flex items-center space-x-1 rtl:space-x-reverse">
-                    <svg class="w-4 h-4 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
-                    </svg>
-                    <svg class="w-4 h-4 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
-                    </svg>
-                    <svg class="w-4 h-4 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
-                    </svg>
-                    <svg class="w-4 h-4 text-yellow-300" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
-                    </svg>
-                    <svg class="w-4 h-4 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z"/>
-                    </svg>
-                </div>
-                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ms-3">5.0</span>
-            </div>
-            <div class="flex items-center justify-between">
-                <span class="text-3xl font-bold text-gray-900 dark:text-white">$599</span>
-                <a href="#" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add to cart</a>
-            </div>
-        </div>
+  <div class="w-full relative bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flex flex-col h-full">
+    <button
+      @click="handleSync"
+      :disabled="isSyncing"
+      class="absolute top-2 right-2 p-2 bg-blue-500 hover:bg-blue-600 text-white rounded-full shadow-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-4 w-4"
+        :class="isSyncing ? 'animate-spin' : ''"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+      </svg>
+    </button>
+    <a href="#" class="flex-1">
+      <img class="w-full h-full object-contain p-4 min-h-[200px]" :src="img_url" alt="product image">
+    </a>
+    <div class="border-t border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 px-5 py-4 rounded-b-lg flex flex-col gap-4">
+      <a href="#" @click="handleEdit">
+        <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{{ name }}</h5>
+      </a>
+      <div class="text-2xl font-bold text-gray-900 dark:text-white">
+        {{ formattedPrice }}
+      </div>
     </div>
+  </div>
 </template>

@@ -55,6 +55,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_29_204550) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["item_id"], name: "index_market_pages_on_item_id"
+    t.index ["market_id", "item_id"], name: "index_market_pages_on_market_id_and_item_id", unique: true
     t.index ["market_id"], name: "index_market_pages_on_market_id"
   end
 

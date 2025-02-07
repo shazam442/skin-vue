@@ -19,7 +19,7 @@ class Service
 
     # Extract query parameters to a separate method for clarity
     query_params = build_query_params(item)
-    listings = SkinbaronClient.search(**query_params)
+    listings = SkinbaronClient.search(**query_params, request_delay: 1)
 
     # Use bulk insert instead of individual upserts for better performance
     listing_attributes = listings.map do |listing|

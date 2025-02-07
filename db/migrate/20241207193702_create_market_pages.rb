@@ -9,5 +9,7 @@ class CreateMarketPages < ActiveRecord::Migration[7.2]
 
       t.timestamps
     end
+
+    add_index :market_pages, [ :market_id, :item_id ], unique: true
   end
 end

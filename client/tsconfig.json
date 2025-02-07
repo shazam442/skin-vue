@@ -1,9 +1,19 @@
 {
   "compilerOptions": {
     "lib": [
-      "ES2015",
+      "ES2019",
       "DOM"
     ],
-    // ... other options
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    },
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "types": [
+      "vite/client"
+    ]
   }
 }

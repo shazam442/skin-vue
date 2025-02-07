@@ -1,11 +1,13 @@
 Rails.application.routes.draw do
-  resources :items do
-    post :update, on: :collection
+  scope "/api" do
+    post :reseed, to: "application#reseed", constraints: lambda { |req| Rails.env.development? }
+
+    resources :items do
+      post :sync_listings, on: :member
+    end
+
+    resources :listings, only: [ :index ]
   end
-
-  resources :listings, only: [ :index ]
-
-  root "items#index"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

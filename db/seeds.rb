@@ -15,10 +15,15 @@ markets = [
 ]
 
 items = [
-  Item.find_or_create_by!(name: "Galil AR | Metallic Squeezer", wear: :minimal_wear, category: :weapon, stattrak: false, souvenir: false),
+  Item.find_or_create_by!(name: "Galil AR | Metallic Squeezer", wear: :factory_new, category: :weapon, stattrak: false, souvenir: false),
+  Item.find_or_create_by!(name: "Nova | Yorkshire", wear: :factory_new, category: :weapon, stattrak: false, souvenir: false),
+  Item.find_or_create_by!(name: "Glock-18 | Teal Graf", wear: :factory_new, category: :weapon, stattrak: false, souvenir: false),
   Item.find_or_create_by!(name: "PP-Bizon | Cold Cell", wear: :factory_new, category: :weapon, stattrak: false, souvenir: false),
-  Item.find_or_create_by!(name: "Glock-18 | Teal Graf", wear: :factory_new, category: :knife, stattrak: false, souvenir: false),
-  Item.find_or_create_by!(name: "Nova | Yorkshire", wear: :factory_new, category: :weapon, stattrak: false, souvenir: false)
+  Item.find_or_create_by!(name: "Nova | Wurst Hölle", wear: :factory_new, category: :weapon, stattrak: false, souvenir: false),
+  Item.find_or_create_by!(name: "MAC-10 | Pipsqueak", wear: :factory_new, category: :weapon, stattrak: false, souvenir: false),
+  Item.find_or_create_by!(name: "SSG 08 | Zeno", wear: :factory_new, category: :weapon, stattrak: false, souvenir: false),
+  Item.find_or_create_by!(name: "P250 | Small Game", wear: :factory_new, category: :weapon, stattrak: false, souvenir: false),
+  Item.find_or_create_by!(name: "USP-S | Alpine Camo", wear: :factory_new, category: :weapon, stattrak: false, souvenir: false)
 ]
 
 items.each do |item|
