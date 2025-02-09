@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_29_204550) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_09_162348) do
   create_table "api_requests", force: :cascade do |t|
     t.string "target_type", null: false
     t.integer "target_id", null: false
@@ -28,8 +28,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_29_204550) do
     t.string "name", null: false
     t.integer "wear", null: false
     t.integer "category", null: false
-    t.boolean "stattrak", null: false
-    t.boolean "souvenir", null: false
+    t.boolean "stattrak"
+    t.boolean "souvenir"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name", "wear", "stattrak", "souvenir"], name: "index_items_on_name_and_wear_and_stattrak_and_souvenir", unique: true
@@ -42,8 +42,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_29_204550) do
     t.string "uid"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["market_page_id", "uid"], name: "index_listings_on_market_page_id_and_uid", unique: true
     t.index ["market_page_id"], name: "index_listings_on_market_page_id"
-    t.index ["uid"], name: "index_listings_on_uid", unique: true
   end
 
   create_table "market_pages", force: :cascade do |t|

@@ -1,4 +1,4 @@
-class MarkePagesController < ApplicationController
+class MarketPagesController < ApplicationController
   def index
     @market_pages = MarketPage.all
   end

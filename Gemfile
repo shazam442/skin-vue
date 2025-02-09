@@ -44,4 +44,12 @@ group :development, :test do
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
+
+  gem "debase", "~> 0.2.9"
+  gem "ruby-debug-ide", "~> 0.7.5"
+
+  gem "annotate"
 end
+
+
+gem "jb", "~> 0.8.2"

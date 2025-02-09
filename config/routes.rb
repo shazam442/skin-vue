@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
-  scope "/api" do
+  scope "/api", defaults: { format: :json } do
     post :reseed, to: "application#reseed", constraints: lambda { |req| Rails.env.development? }
 
     resources :items do
-      post :sync_listings, on: :member
+      post :sync_listings, on: :member, to: "items/listings_sync#create"
     end
 
     resources :listings, only: [ :index ]

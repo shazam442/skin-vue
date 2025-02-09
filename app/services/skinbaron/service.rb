@@ -1,57 +1,63 @@
 module Skinbaron
-class Service
-  def initialize(items)
-    @items = Array(items)
-    @market = Market.skinbaron
-    @market_page = nil
-  end
-
-  def sync_to_db
-    if @items.one?
-      sync_one(@items.first)
-    else
-      # sync_multiple(@items)
+  class Service
+    def initialize(items)
+      raise ArgumentError, "Items must be an array" unless items.is_a?(Array)
+      @item_groups = Item.group_by_attributes(items)
     end
-  end
 
-  def sync_one(item)
-    market_page = MarketPage.find_or_create_by(market: @market, item: item)
+    def self.sync_to_db(items)
+      new(Array(items)).sync_to_db
+    end
 
-    # Extract query parameters to a separate method for clarity
-    query_params = build_query_params(item)
-    listings = SkinbaronClient.search(**query_params, request_delay: 1)
+    def sync_to_db
+      @item_groups.map do |attributes, items|
+        listings_group = fetch_listings!(attributes, items)
+        upsert_listings!(listings_group)
+      end
+    end
 
-    # Use bulk insert instead of individual upserts for better performance
-    listing_attributes = listings.map do |listing|
+    private
+
+    def upsert_listings!(listings_group)
+      listing_attributes = listings_group.map do |l|
+        item = Item.find_or_create_by_market_hash_name(l["market_name"])
+        {
+          market_page: market_page(item),
+          uid: l["id"],
+          float: l["wear"],
+          price: l["price"]
+        }
+      end
+
+      Listing.upsert_all(
+        listing_attributes,
+        unique_by: :uid,
+        returning: false
+      )
+    end
+
+    def fetch_listings!(attributes, items)
+      query_params = build_group_query(attributes, items)
+      SkinbaronClient.search(**query_params, request_delay: 1)
+    end
+
+    def market_page(item)
+      MarketPage.find_or_create_by(market: Market.skinbaron, item: item)
+    end
+
+    def build_group_query(attributes, items)
+      float_range = Item.float_range(wear: attributes[:wear])
+
       {
-        market_page_id: market_page.id,
-        uid: listing["id"],
-        float: listing["wear"],
-        price: listing["price"],
-        created_at: Time.current,
-        updated_at: Time.current
-      }
+        items: items.map { _1.market_hash_name(wear: false, sttrk_souv: false) },
+        pages: -1,
+        min_wear: float_range.begin,
+        max_wear: float_range.end,
+        stackable: false
+      }.tap do |h|
+        h[:stattrak] = attributes[:stattrak] unless attributes[:stattrak].nil?
+        h[:souvenir] = attributes[:souvenir] unless attributes[:souvenir].nil?
+      end
     end
-
-    Listing.upsert_all(
-      listing_attributes,
-      unique_by: :uid,
-      returning: false
-    )
   end
-
-  private
-
-  def build_query_params(item)
-    {
-      items: item.market_hash_name(wear: false, sttrk_souv: false),
-      pages: -1,
-      min_wear: item.float_range.begin,
-      max_wear: item.float_range.end,
-      stattrak: item.stattrak?,
-      souvenir: item.souvenir?,
-      stackable: false
-    }
-  end
-end
 end

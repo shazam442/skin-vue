@@ -1,0 +1,12 @@
+{
+  id: item.id,
+  name: item.name,
+  wear: item.wear,
+  category: item.category,
+  stattrak: item.stattrak,
+  souvenir: item.souvenir,
+  img_url: item.img_url,
+  cheapest_listing: item.cheapest_listing,
+  created_at: item.created_at,
+  updated_at: item.updated_at
+}
